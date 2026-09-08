@@ -3,82 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Clone</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Netflix Clone - All-In-One Streaming Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-red: #e50914;
-            --dark-bg: #111;
-            --text-light: #fff;
-            --nav-bg: rgba(17, 17, 17, 0.95);
+            --hover-red: #f40612;
+            --dark-bg: #141414;
+            --card-bg: #181818;
+            --nav-bg: rgba(20, 20, 20, 0.95);
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+            --border-color: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(20, 20, 20, 0.85);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
             background-color: var(--dark-bg);
             color: var(--text-light);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Navbar */
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Top Navigation Bar */
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 20px 40px;
+            height: 68px;
+            padding: 0 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            transition: background-color 0.4s ease;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
+            background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
         }
 
         .navbar.scrolled {
             background-color: var(--nav-bg);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(14px);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 36px;
         }
 
         .logo {
             color: var(--primary-red);
-            font-size: 2rem;
-            font-weight: 800;
-            text-transform: uppercase;
+            font-size: 1.85rem;
+            font-weight: 900;
             letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 0 2px 10px rgba(229, 9, 20, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 22px;
             list-style: none;
         }
 
-        .nav-links li {
+        .nav-link {
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: #e5e5e5;
+            text-decoration: none;
+            transition: color 0.25s ease, font-weight 0.2s;
+            position: relative;
+            padding: 6px 0;
         }
 
-        .nav-links li:hover {
+        .nav-link:hover {
             color: #b3b3b3;
         }
 
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 85vh;
-            background-image: url('file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/hero_bg_1788861856758.jpg'), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1925&q=80');
-            background-size: cover;
-            background-position: center;
+        .nav-link.active {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-red);
+            border-radius: 2px;
+        }
+
+        .nav-badge {
+            background: var(--primary-red);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .nav-right {
             display: flex;
             align-items: center;
+            gap: 20px;
+        }
+
+        /* Sound FX Button in Navbar */
+        .sound-fx-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .sound-fx-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: white;
+        }
+
+        /* Search input bar */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 6px 10px;
+            transition: all 0.3s ease;
+            width: 38px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .search-box.active {
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            width: 270px;
+            background: rgba(0, 0, 0, 0.85);
+            cursor: text;
+        }
+
+        .search-icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            padding-left: 10px;
+            width: 100%;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-box.active .search-input {
+            opacity: 1;
+        }
+
+        .search-clear-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        .search-clear-btn:hover {
+            color: white;
+        }
+
+        /* Notifications Tray */
+        .notifications-container {
+            position: relative;
+        }
+
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .nav-icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-indicator {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+        }
+
+        .notifications-tray {
+            position: absolute;
+            top: 45px;
+            right: -80px;
+            width: 340px;
+            background: rgba(18, 18, 18, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.85);
+            backdrop-filter: blur(16px);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 1002;
+            overflow: hidden;
+        }
+
+        .notifications-container.open .notifications-tray {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .notifications-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .notifications-list {
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 12px 18px;
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .notification-thumb {
+            width: 55px;
+            height: 55px;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            font-size: 0.82rem;
+            color: #ccc;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 3px;
+        }
+
+        .notification-time {
+            font-size: 0.72rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Profile Menu */
+        .profile-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e50914, #b20710);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .profile-container:hover .profile-avatar {
+            transform: scale(1.06);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 230px;
+            background: rgba(18, 18, 18, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 1001;
+            backdrop-filter: blur(16px);
+        }
+
+        .profile-container:hover .profile-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-item {
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            text-decoration: none;
+        }
+
+        .profile-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .profile-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.12);
+            margin: 8px 0;
+        }
+
+        /* PAGE VIEWS CONTAINER */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            padding-bottom: 80px;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO BANNER WITH VIDEO PREVIEW & AUDIO TOGGLE */
+        .hero {
+            position: relative;
+            height: 84vh;
+            min-height: 600px;
+            background-size: cover;
+            background-position: center top;
+            display: flex;
+            align-items: center;
+            padding: 0 4%;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+        .hero-video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%) scale(1.3);
+            pointer-events: none;
+            opacity: 0.55;
+            transition: opacity 1s ease;
+            z-index: 1;
+        }
+
+        .hero-video-bg iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(77deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+            z-index: 2;
         }
 
         .hero::after {
@@ -87,93 +496,256 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 150px;
-            background: linear-gradient(to top, var(--dark-bg) 0%, transparent 100%);
+            height: 180px;
+            background: linear-gradient(180deg, transparent 0%, rgba(20, 20, 20, 0.8) 60%, var(--dark-bg) 100%);
+            z-index: 2;
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
-            padding: 0 40px;
-            max-width: 600px;
+            max-width: 680px;
+            margin-top: 40px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(229, 9, 20, 0.25);
+            border: 1px solid rgba(229, 9, 20, 0.5);
+            color: #ff5a64;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
 
         .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+            font-weight: 900;
+            margin-bottom: 16px;
+            line-height: 1.08;
+            letter-spacing: -1px;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
         }
 
         .hero-desc {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+            line-height: 1.55;
+            color: #e5e5e5;
+            margin-bottom: 28px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Hero Right Controls (Volume toggle & Rating badge) */
+        .hero-controls-right {
+            position: absolute;
+            right: 4%;
+            bottom: 35%;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 10;
+        }
+
+        .hero-audio-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .hero-audio-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        .hero-rating-badge {
+            background: rgba(51, 51, 51, 0.6);
+            border-left: 3px solid #dcdcdc;
+            padding: 6px 14px 6px 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
         }
 
         .btn {
-            padding: 10px 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 12px 28px;
+            font-size: 1.05rem;
+            font-weight: 700;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            transition: transform 0.2s, background-color 0.2s;
+            transition: all 0.25s ease;
+            text-decoration: none;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
+        .btn:active {
+            transform: scale(0.96);
         }
 
         .btn-play {
             background-color: white;
             color: black;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
         }
 
         .btn-play:hover {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.85);
+            transform: scale(1.04);
         }
 
         .btn-info {
             background-color: rgba(109, 109, 110, 0.7);
             color: white;
+            backdrop-filter: blur(8px);
         }
 
         .btn-info:hover {
             background-color: rgba(109, 109, 110, 0.9);
+            transform: scale(1.04);
         }
 
-        /* Rows */
+        .btn-list {
+            background: rgba(30, 30, 30, 0.7);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-list:hover {
+            background: rgba(50, 50, 50, 0.9);
+            border-color: white;
+            transform: scale(1.04);
+        }
+
+        /* PAGE SUBHEADER FOR GENRES/FILTERS */
+        .page-header-bar {
+            padding: 95px 4% 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-header-title {
+            font-size: 2.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .genre-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .genre-pill {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .genre-pill:hover, .genre-pill.active {
+            background: white;
+            color: black;
+            border-color: white;
+        }
+
+        /* ROWS & POSTERS */
         .row-container {
-            padding: 20px 40px;
-            margin-top: -80px;
+            padding: 24px 4%;
             position: relative;
             z-index: 20;
         }
 
+        .row-container.negative-margin {
+            margin-top: -110px;
+        }
+
+        .row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 14px;
+        }
+
         .row-title {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #e5e5e5;
+            transition: color 0.2s;
+        }
+
+        .row-title:hover {
+            color: white;
+        }
+
+        .see-all-link {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
             font-weight: 600;
-            margin-bottom: 15px;
-            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .see-all-link:hover {
+            color: white;
         }
 
         .row-posters {
             display: flex;
             overflow-y: hidden;
-            overflow-x: scroll;
-            padding: 20px 10px;
-            gap: 15px;
+            overflow-x: auto;
+            padding: 24px 8px 30px;
+            gap: 16px;
             scroll-behavior: smooth;
         }
 
@@ -181,34 +753,38 @@
             display: none;
         }
 
+        /* Movie / Show Card */
         .poster {
-            flex: 0 0 200px;
-            height: 300px;
+            flex: 0 0 215px;
+            height: 320px;
             border-radius: 8px;
-            background-color: #333;
+            background-color: var(--card-bg);
             background-size: cover;
             background-position: center;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .poster-large {
+            flex: 0 0 260px;
+            height: 390px;
         }
 
         .poster::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            opacity: 0;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.95) 100%);
+            opacity: 0.7;
             transition: opacity 0.3s;
         }
 
         .poster:hover {
-            transform: scale(1.08);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transform: scale(1.08) translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.8), 0 0 20px rgba(229, 9, 20, 0.3);
             z-index: 10;
         }
 
@@ -216,147 +792,2693 @@
             opacity: 1;
         }
 
+        .poster-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary-red);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            z-index: 2;
+            text-transform: uppercase;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
         .poster-info {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
             z-index: 2;
-            opacity: 0;
-            transition: opacity 0.3s;
+            transform: translateY(10px);
+            transition: transform 0.3s ease;
         }
 
         .poster:hover .poster-info {
-            opacity: 1;
+            transform: translateY(0);
         }
 
         .poster-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .poster-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .match-score {
+            color: #46d369;
+            font-weight: 700;
+        }
+
+        .tag-pill {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 0 4px;
+            border-radius: 2px;
+            font-size: 0.68rem;
+        }
+
+        .poster-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .poster:hover .poster-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(30, 30, 30, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .card-btn:hover {
+            background: white;
+            color: black;
+            border-color: white;
+            transform: scale(1.15);
+        }
+
+        .card-btn.active {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            color: white;
+        }
+
+        /* 3-Way Reaction Hover Bar */
+        .reaction-menu {
+            position: absolute;
+            bottom: 38px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 30;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+        }
+
+        .reaction-btn-wrapper:hover .reaction-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .reaction-choice {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reaction-choice:hover {
+            transform: scale(1.3);
+        }
+
+        /* CONTINUE WATCHING ROW WITH PROGRESS BARS */
+        .continue-card {
+            flex: 0 0 250px;
+            height: 220px;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+        }
+
+        .continue-card:hover {
+            transform: scale(1.06);
+            z-index: 10;
+        }
+
+        .continue-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.95) 100%);
+        }
+
+        .continue-play-overlay {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .continue-card:hover .continue-play-overlay {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .continue-info {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            padding: 0 14px;
+            z-index: 3;
+        }
+
+        .continue-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .continue-progress-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .continue-progress-fill {
+            height: 100%;
+            background: var(--primary-red);
+        }
+
+        .continue-time-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* TOP 10 RANKED ROW WITH GIANT NUMBERS */
+        .top10-poster-container {
+            display: flex;
+            align-items: center;
+            flex: 0 0 280px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+        .top10-poster-container:hover {
+            transform: scale(1.08);
+            z-index: 10;
+        }
+
+        .top10-rank {
+            font-size: 9.5rem;
+            font-weight: 900;
+            line-height: 1;
+            color: #141414;
+            -webkit-text-stroke: 4px #595959;
+            margin-right: -24px;
+            z-index: 1;
+            user-select: none;
+            transition: -webkit-text-stroke 0.3s;
+        }
+
+        .top10-poster-container:hover .top10-rank {
+            -webkit-text-stroke: 4px var(--primary-red);
+            color: rgba(229, 9, 20, 0.15);
+        }
+
+        .top10-poster {
+            flex: 0 0 170px;
+            height: 250px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+
+        /* GRID LAYOUT FOR MY LIST / CATALOG / SEARCH */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 22px;
+            padding: 20px 4% 40px;
+        }
+
+        .catalog-grid .poster {
+            width: 100%;
+            height: 310px;
+            flex: unset;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 26px;
+        }
+
+        /* ==================== SEARCH RESULTS VIEW ==================== */
+        #page-search {
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+
+        /* ==================== SIGN IN PAGE VIEW ==================== */
+        #page-signin {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/hero_bg_1788861856758.jpg') center/cover no-repeat;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 60px;
+        }
+
+        #page-signin.active {
+            display: flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .signin-card {
+            background-color: rgba(0, 0, 0, 0.82);
+            border-radius: 8px;
+            padding: 50px 60px;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+        }
+
+        .signin-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 18px;
+            background: #333;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            background: #454545;
+            border-color: #fff;
+        }
+
+        .btn-signin {
+            width: 100%;
+            padding: 16px;
+            background-color: #e50914;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-signin:hover {
+            background-color: #f40612;
+            transform: scale(1.01);
+        }
+
+        .signin-help-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: #b3b3b3;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .signin-switch-text {
+            margin-top: 36px;
+            font-size: 0.95rem;
+            color: #737373;
+        }
+
+        .signin-switch-text a {
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .signin-switch-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== WHO'S WATCHING PROFILES VIEW ==================== */
+        #page-profiles {
+            min-height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 60px;
+            background: radial-gradient(circle at center, #252525 0%, #111 80%);
+        }
+
+        #page-profiles.active {
+            display: flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .profile-picker-container {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .profile-picker-title {
+            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .profiles-grid {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.25s;
+        }
+
+        .profile-card:hover {
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .profile-card-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 8px;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            transition: border-color 0.25s;
+        }
+
+        .profile-card:hover .profile-card-avatar {
+            border-color: white;
+        }
+
+        .profile-card-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        /* Add Profile Card */
+        .add-profile-card .profile-card-avatar {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .add-profile-card:hover .profile-card-avatar {
+            border-color: white;
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .manage-profiles-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.75);
+            padding: 11px 32px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .manage-profiles-btn:hover {
+            border-color: white;
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ==================== DETAILS POPUP MODAL & EPISODES ==================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.78);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--dark-bg);
+            width: 100%;
+            max-width: 860px;
+            max-height: 90vh;
+            border-radius: 12px;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            transform: scale(0.85);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 15;
+            transition: all 0.25s;
+        }
+
+        .modal-close-btn:hover {
+            background: white;
+            color: black;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .modal-video-container {
+            width: 100%;
+            height: 440px;
+            background-color: #000;
+            position: relative;
+        }
+
+        .modal-video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(180deg, transparent 0%, var(--dark-bg) 100%);
+            pointer-events: none;
+        }
+
+        .modal-tabs-bar {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0 38px;
+            gap: 28px;
+        }
+
+        .modal-tab-btn {
+            background: none;
+            border: none;
+            color: #aaa;
             font-size: 1rem;
             font-weight: 700;
-            margin-bottom: 5px;
+            padding: 14px 0;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
         }
-        
-        .poster-tags {
-            font-size: 0.8rem;
+
+        .modal-tab-btn.active {
+            color: white;
+        }
+
+        .modal-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-red);
+        }
+
+        .modal-body {
+            padding: 24px 38px 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 36px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .modal-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+
+        .modal-desc {
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: #e0e0e0;
+            margin-bottom: 24px;
+        }
+
+        .modal-sidebar {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .modal-sidebar span {
+            color: white;
+        }
+
+        /* Episodes Section in Modal */
+        .episodes-container {
+            padding: 24px 38px 40px;
+            display: none;
+        }
+
+        .episodes-container.active {
+            display: block;
+        }
+
+        .episodes-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .season-select {
+            background: #252525;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .episode-card {
+            display: flex;
+            gap: 20px;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            align-items: center;
+        }
+
+        .episode-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .episode-num {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #777;
+            width: 25px;
+            text-align: center;
+        }
+
+        .episode-thumb {
+            width: 140px;
+            height: 80px;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .episode-thumb::after {
+            content: '▶';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .episode-card:hover .episode-thumb::after {
+            opacity: 1;
+        }
+
+        .episode-details {
+            flex: 1;
+        }
+
+        .episode-title-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .episode-desc {
+            font-size: 0.85rem;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        /* ==================== FULLSCREEN STREAMING WATCH PLAYER VIEW ==================== */
+        #watch-view {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #watch-view.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .player-video-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .player-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .player-header {
+            position: relative;
+            z-index: 10;
+            padding: 25px 40px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: opacity 0.3s;
+        }
+
+        .player-back-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .player-back-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        .player-title-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .player-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Skip Intro Floating Button in Player */
+        .skip-intro-btn {
+            position: absolute;
+            right: 40px;
+            bottom: 120px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 12;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(6px);
+        }
+
+        .skip-intro-btn:hover {
+            background: white;
+            color: black;
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .player-controls-bottom {
+            position: relative;
+            z-index: 10;
+            padding: 30px 40px 25px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: opacity 0.3s;
+        }
+
+        .player-progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            transition: height 0.2s;
+        }
+
+        .player-progress-bar-container:hover {
+            height: 10px;
+        }
+
+        .player-progress-fill {
+            width: 32%;
+            height: 100%;
+            background: var(--primary-red);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .player-progress-handle {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .player-progress-bar-container:hover .player-progress-handle {
+            opacity: 1;
+        }
+
+        .player-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-left-controls, .player-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .player-btn:hover {
+            color: var(--primary-red);
+            transform: scale(1.1);
+        }
+
+        .time-display {
+            font-size: 0.9rem;
+            color: #ccc;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Audio & Subtitles Panel in Player */
+        .audio-subs-modal {
+            position: absolute;
+            bottom: 95px;
+            right: 40px;
+            width: 440px;
+            background: rgba(20, 20, 20, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            z-index: 20;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.85);
+        }
+
+        .audio-subs-modal.active {
+            display: grid;
+        }
+
+        .audio-subs-col-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        .audio-subs-option {
+            padding: 8px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        .audio-subs-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .audio-subs-option.selected {
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Add Profile Modal */
+        .add-profile-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500;
+            backdrop-filter: blur(6px);
+        }
+
+        .add-profile-modal-overlay.active {
+            display: flex;
+        }
+
+        .add-profile-box {
+            background: #181818;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(20, 20, 20, 0.95);
+            border-left: 4px solid var(--primary-red);
+            padding: 16px 24px;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            z-index: 4000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(8px);
+        }
+
+        .toast-container.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 70px 4% 40px;
+            color: #757575;
+            font-size: 0.85rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 25px 0;
+            list-style: none;
+        }
+
+        @media (max-width: 600px) {
+            .footer-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .footer-links a {
+            color: #757575;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
             color: #aaa;
         }
 
-        /* Large Poster variant for main rows */
-        .poster-large {
-            flex: 0 0 250px;
-            height: 375px;
+        .footer-service-code {
+            border: 1px solid #757575;
+            background: none;
+            color: #757575;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
-
     </style>
 </head>
 <body>
 
+    <!-- TOP NAVIGATION BAR -->
     <nav class="navbar" id="navbar">
-        <div class="logo">NETFLIX</div>
-        <ul class="nav-links">
-            <li>Home</li>
-            <li>TV Shows</li>
-            <li>Movies</li>
-            <li>New & Popular</li>
-            <li>My List</li>
-        </ul>
-        <div style="width: 30px; height: 30px; background: #e50914; border-radius: 4px;"></div>
-    </nav>
+        <div class="nav-left">
+            <a href="#home" class="logo" onclick="playNetflixTadum()" title="Netflix (Click for Sound FX)">NETFLIX</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#tv-shows" class="nav-link" data-page="tv-shows">TV Shows</a></li>
+                <li><a href="#movies" class="nav-link" data-page="movies">Movies</a></li>
+                <li><a href="#new" class="nav-link" data-page="new">New & Popular</a></li>
+                <li><a href="#my-list" class="nav-link" data-page="my-list">My List <span class="nav-badge" id="myListBadge">0</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="nav-right">
+            <!-- Audio Sound FX toggle -->
+            <button class="sound-fx-btn" onclick="toggleAudioFx()" id="audioFxBtn" title="Synthesized Web Audio FX">
+                <span id="audioFxIcon">🔊</span>
+                <span id="audioFxText">Sound ON</span>
+            </button>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Astro Odyssey</h1>
-            <p class="hero-desc">Stranded on a desolate red planet, a lone astronaut must confront the unknown to survive the harsh environment and unravel a galactic mystery before time runs out.</p>
-            <div class="hero-buttons">
-                <button class="btn btn-play">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    Play
+            <!-- Live Search Bar -->
+            <div class="search-box" id="searchBox">
+                <button class="search-icon-btn" id="searchIconBtn" title="Search">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 </button>
-                <button class="btn btn-info">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                    More Info
+                <input type="text" class="search-input" placeholder="Search titles, actors, genres..." id="searchInput">
+                <button class="search-clear-btn" id="searchClearBtn" onclick="clearLiveSearch()">✕</button>
+            </div>
+            
+            <!-- Notifications Center -->
+            <div class="notifications-container" id="notificationsContainer">
+                <button class="nav-icon-btn" onclick="toggleNotificationsTray()" title="Notifications">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                    <div class="notification-indicator" id="notifBadge"></div>
                 </button>
+                <div class="notifications-tray" id="notificationsTray">
+                    <div class="notifications-header">
+                        <span>Notifications</span>
+                        <a onclick="markAllNotificationsRead()" style="color: #e50914; font-size: 0.75rem; cursor: pointer;">Mark all as read</a>
+                    </div>
+                    <div class="notifications-list" id="notificationsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Profile Dropdown -->
+            <div class="profile-container">
+                <button class="profile-btn">
+                    <div class="profile-avatar" id="navAvatar">A</div>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div id="profileDropdownList">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="profile-divider"></div>
+                    <a href="#profiles" class="profile-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                        Manage Profiles
+                    </a>
+                    <a href="#signin" class="profile-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        Sign In / Account
+                    </a>
+                    <div class="profile-divider"></div>
+                    <a href="#signin" class="profile-item" style="color: #ff6b6b;" onclick="showToast('Signed out of Netflix')">Sign Out of Netflix</a>
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <section class="row-container">
-            <h2 class="row-title">Netflix Originals</h2>
-            <div class="row-posters" id="originals">
-                <!-- Posters will be generated by JS -->
+    <!-- ==================== VIEW 1: HOME PAGE ==================== -->
+    <div class="page-view active" id="page-home">
+        <header class="hero" id="homeHero" style="background-image: url('file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/hero_bg_1788861856758.jpg'), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1925&q=80');">
+            <!-- Subtle embedded trailer background with fade-in -->
+            <div class="hero-video-bg" id="heroVideoBg">
+                <iframe id="heroVideoIframe" src="https://www.youtube.com/embed/b9EkMc79ZSU?autoplay=1&mute=1&controls=0&loop=1&playlist=b9EkMc79ZSU&modestbranding=1" allow="autoplay; encrypted-media"></iframe>
             </div>
-        </section>
 
-        <section class="row-container" style="margin-top: 20px;">
-            <h2 class="row-title">Trending Now</h2>
-            <div class="row-posters" id="trending">
-                <!-- Posters will be generated by JS -->
+            <div class="hero-content">
+                <div class="hero-badge">NETFLIX ORIGINAL SERIES</div>
+                <h1 class="hero-title">Astro Odyssey</h1>
+                <div class="hero-meta">
+                    <span class="match-score">99% Match</span>
+                    <span>2026</span>
+                    <span class="tag-pill">U/A 16+</span>
+                    <span>2 Seasons</span>
+                    <span class="tag-pill">Ultra HD 4K</span>
+                </div>
+                <p class="hero-desc">Stranded on a desolate red planet in a forgotten sector of space, an astronaut must confront enigmatic temporal anomalies to survive and safeguard humanity's final interstellar beacon.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-play" onclick="startStreaming('Astro Odyssey', 'Season 1: Episode 1 - Red Horizon')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Play Now
+                    </button>
+                    <button class="btn btn-info" onclick="openDetailsModal('Astro Odyssey')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        More Info
+                    </button>
+                    <button class="btn btn-list" id="homeListBtn" onclick="toggleMyListHero('Astro Odyssey')">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        <span>Add to My List</span>
+                    </button>
+                </div>
             </div>
-        </section>
 
-        <section class="row-container" style="margin-top: 20px;">
-            <h2 class="row-title">Sci-Fi & Fantasy</h2>
-            <div class="row-posters" id="scifi">
-                <!-- Posters will be generated by JS -->
+            <!-- Hero Right Audio / Maturity controls -->
+            <div class="hero-controls-right">
+                <button class="hero-audio-btn" onclick="toggleHeroAudio()" id="heroAudioBtn" title="Toggle Preview Sound">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" id="heroAudioIcon"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                </button>
+                <div class="hero-rating-badge">U/A 16+</div>
             </div>
-        </section>
-    </main>
+        </header>
 
+        <main>
+            <!-- CONTINUE WATCHING ROW -->
+            <section class="row-container negative-margin" id="continueWatchingSection">
+                <div class="row-header">
+                    <h2 class="row-title">Continue Watching for <span id="continueUserLabel">Alex</span></h2>
+                </div>
+                <div class="row-posters" id="continueWatchingRow"></div>
+            </section>
+
+            <!-- TRENDING NOW -->
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Trending Now</h2>
+                    <a href="#movies" class="see-all-link">Explore all &rsaquo;</a>
+                </div>
+                <div class="row-posters" id="homeTrendingRow"></div>
+            </section>
+
+            <!-- NETFLIX ORIGINALS -->
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Netflix Originals</h2>
+                    <a href="#tv-shows" class="see-all-link">Explore series &rsaquo;</a>
+                </div>
+                <div class="row-posters" id="homeOriginalsRow"></div>
+            </section>
+
+            <!-- TOP 10 IN COUNTRY -->
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Top 10 in Your Country Today</h2>
+                </div>
+                <div class="row-posters" id="homeTop10Row"></div>
+            </section>
+
+            <!-- SCI-FI & CYBERPUNK -->
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Sci-Fi & Cyberpunk Adventures</h2>
+                </div>
+                <div class="row-posters" id="homeScifiRow"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 2: TV SHOWS ==================== -->
+    <div class="page-view" id="page-tv-shows">
+        <header class="hero" style="background-image: url('file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/tv_hero_bg_1788862658317.jpg'), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
+            <div class="hero-content">
+                <div class="hero-badge">NEW SEASON STREAMING</div>
+                <h1 class="hero-title">The Ashen Path</h1>
+                <div class="hero-meta">
+                    <span class="match-score">98% Match</span>
+                    <span>2026</span>
+                    <span class="tag-pill">18+</span>
+                    <span>Season 1</span>
+                    <span class="tag-pill">Spatial Audio</span>
+                </div>
+                <p class="hero-desc">In an ancient realm corrupted by dark magic and veiled in perpetual mist, a solitary warrior guided by arcane embers journeys toward a forgotten sanctuary to avert an apocalyptic prophecy.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-play" onclick="startStreaming('The Ashen Path', 'Episode 1: Embers in the Mist')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Play Episode 1
+                    </button>
+                    <button class="btn btn-info" onclick="openDetailsModal('The Ashen Path')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        Episodes & Info
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-header-bar" style="padding-top: 20px;">
+            <h2 class="page-header-title">TV Shows & Series</h2>
+            <div class="genre-pills">
+                <button class="genre-pill active" onclick="filterGenre(this, 'all')">All Genres</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Drama')">Dramas</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Fantasy')">Fantasy & Sci-Fi</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Crime')">Crime & Thrillers</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Anime')">Anime</button>
+            </div>
+        </div>
+
+        <main>
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Binge-worthy TV Dramas</h2>
+                </div>
+                <div class="row-posters" id="tvDramasRow"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Fantasy & Mythological Sagas</h2>
+                </div>
+                <div class="row-posters" id="tvFantasyRow"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Crime & Mystery Television</h2>
+                </div>
+                <div class="row-posters" id="tvCrimeRow"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 3: MOVIES ==================== -->
+    <div class="page-view" id="page-movies">
+        <header class="hero" style="background-image: url('file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/top10_poster_1788862673862.jpg'), url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
+            <div class="hero-content">
+                <div class="hero-badge">BLOCKBUSTER PREMIERE</div>
+                <h1 class="hero-title">Cyber Chase: 2088</h1>
+                <div class="hero-meta">
+                    <span class="match-score">97% Match</span>
+                    <span>2026</span>
+                    <span class="tag-pill">PG-13</span>
+                    <span>2h 18m</span>
+                    <span class="tag-pill">Dolby Vision</span>
+                </div>
+                <p class="hero-desc">Through the neon-drenched canyons of Neo-Kyoto, an underground operative uncovers a sinister cybernetic syndicate that threatens the line between humanity and artificial life.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-play" onclick="startStreaming('Cyber Chase: 2088', 'Full Feature Film')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Play Movie
+                    </button>
+                    <button class="btn btn-info" onclick="openDetailsModal('Cyber Chase: 2088')">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        Details
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-header-bar" style="padding-top: 20px;">
+            <h2 class="page-header-title">Feature Films & Blockbusters</h2>
+            <div class="genre-pills">
+                <button class="genre-pill active" onclick="filterGenre(this, 'all')">All Movies</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Action')">Action & Adventure</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Sci-Fi')">Sci-Fi</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Thriller')">Thrillers</button>
+                <button class="genre-pill" onclick="filterGenre(this, 'Award-Winning')">Award-Winning</button>
+            </div>
+        </div>
+
+        <main>
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">High-Octane Action Blockbusters</h2>
+                </div>
+                <div class="row-posters" id="movieActionRow"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Critically Acclaimed Cinema</h2>
+                </div>
+                <div class="row-posters" id="movieAcclaimedRow"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Psychological & Mystery Thrillers</h2>
+                </div>
+                <div class="row-posters" id="movieThrillersRow"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 4: NEW & POPULAR ==================== -->
+    <div class="page-view" id="page-new">
+        <div class="page-header-bar">
+            <div>
+                <h2 class="page-header-title">New & Popular</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 6px;">Discover what's trending, top rated, and arriving this week on Netflix.</p>
+            </div>
+        </div>
+
+        <main>
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Top 10 Movies Today</h2>
+                </div>
+                <div class="row-posters" id="newTop10Row"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Worth The Wait (Coming Soon)</h2>
+                </div>
+                <div class="row-posters" id="newComingSoonRow"></div>
+            </section>
+
+            <section class="row-container">
+                <div class="row-header">
+                    <h2 class="row-title">Fresh Releases This Week</h2>
+                </div>
+                <div class="row-posters" id="newFreshRow"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 5: MY LIST ==================== -->
+    <div class="page-view" id="page-my-list">
+        <div class="page-header-bar">
+            <div>
+                <h2 class="page-header-title">My List</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 6px;">Your personalized watchlist saved on this device.</p>
+            </div>
+            <button class="manage-profiles-btn" onclick="clearMyList()" style="font-size: 0.85rem; padding: 8px 18px;">Clear List</button>
+        </div>
+
+        <div class="catalog-grid" id="myListGrid">
+            <!-- Populated dynamically via JS from localStorage -->
+        </div>
+
+        <div class="empty-state" id="myListEmpty" style="display: none;">
+            <div class="empty-state-icon">
+                <svg viewBox="0 0 24 24" width="64" height="64" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </div>
+            <h3 class="empty-state-title">Your list is currently empty</h3>
+            <p class="empty-state-desc">Explore movies and TV shows to add them to your personalized watchlist. Click the '+' button on any title!</p>
+            <a href="#home" class="btn btn-play" style="display: inline-flex;">Browse Titles</a>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW 6: SEARCH RESULTS PAGE ==================== -->
+    <div class="page-view" id="page-search">
+        <div class="page-header-bar">
+            <div>
+                <h2 class="page-header-title" id="searchHeaderTitle">Explore Titles</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 6px;" id="searchHeaderSub">Showing search results</p>
+            </div>
+            <div class="genre-pills">
+                <button class="genre-pill active" onclick="filterSearchCategory(this, 'all')">All</button>
+                <button class="genre-pill" onclick="filterSearchCategory(this, 'Sci-Fi')">Sci-Fi</button>
+                <button class="genre-pill" onclick="filterSearchCategory(this, 'Action')">Action</button>
+                <button class="genre-pill" onclick="filterSearchCategory(this, 'Drama')">Drama</button>
+                <button class="genre-pill" onclick="filterSearchCategory(this, 'Fantasy')">Fantasy</button>
+            </div>
+        </div>
+
+        <div class="catalog-grid" id="searchResultsGrid">
+            <!-- Populated via search JS -->
+        </div>
+
+        <div class="empty-state" id="searchEmpty" style="display: none;">
+            <div class="empty-state-icon">🔍</div>
+            <h3 class="empty-state-title">No matching titles found</h3>
+            <p class="empty-state-desc">Try searching with different keywords, actor names, or genres.</p>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW 7: AUTHENTIC SIGN IN PAGE ==================== -->
+    <div class="page-view" id="page-signin">
+        <div class="signin-card">
+            <h1 class="signin-title">Sign In</h1>
+            <form onsubmit="handleSignInSubmit(event)">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Email or mobile number" required value="alex.member@netflix.com">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" required value="••••••••••••">
+                </div>
+                <button type="submit" class="btn-signin">Sign In</button>
+                
+                <div class="signin-help-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        Remember me
+                    </label>
+                    <a href="#" style="color: #b3b3b3; text-decoration: none;" onclick="showToast('Password reset link sent to registered email!')">Need help?</a>
+                </div>
+            </form>
+
+            <div class="signin-switch-text">
+                New to Netflix? <a onclick="showToast('Welcome to Netflix! Signing you in...') ; setTimeout(() => window.location.hash = '#home', 1000)">Sign up now</a>.
+            </div>
+
+            <p style="margin-top: 18px; font-size: 0.78rem; color: #8c8c8c; line-height: 1.4;">
+                This page is protected by Google reCAPTCHA to ensure you're not a bot. 
+                <a href="#" style="color: #0071eb; text-decoration: none;">Learn more.</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW 8: "WHO'S WATCHING?" PROFILES ==================== -->
+    <div class="page-view" id="page-profiles">
+        <div class="profile-picker-container">
+            <h1 class="profile-picker-title">Who's watching?</h1>
+            
+            <div class="profiles-grid" id="profilesGrid">
+                <!-- Dynamically populated profiles + Add Profile card -->
+            </div>
+
+            <button class="manage-profiles-btn" onclick="openAddProfileModal()">+ Add New Profile</button>
+        </div>
+    </div>
+
+    <!-- ==================== VIEW 9: FULLSCREEN STREAMING WATCH PLAYER ==================== -->
+    <div id="watch-view">
+        <div class="player-video-wrapper">
+            <iframe class="player-iframe" id="playerIframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+
+        <div class="player-header">
+            <button class="player-back-btn" onclick="exitStreaming()" title="Back to Browse (Esc)">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <div class="player-title-info">
+                <div class="player-title" id="playerMediaTitle">Movie Title</div>
+                <div class="player-subtitle" id="playerMediaSubtitle">Episode / Stream Info</div>
+            </div>
+        </div>
+
+        <!-- Skip Intro Button -->
+        <button class="skip-intro-btn" id="skipIntroBtn" onclick="skipIntroAction()">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+            Skip Intro
+        </button>
+
+        <!-- Audio & Subtitles Menu Overlay in Player -->
+        <div class="audio-subs-modal" id="audioSubsModal">
+            <div>
+                <div class="audio-subs-col-title">Audio</div>
+                <div class="audio-subs-option selected" onclick="selectAudioTrack(this, 'English [Original] (5.1)')">
+                    English [Original] (5.1) <span>✓</span>
+                </div>
+                <div class="audio-subs-option" onclick="selectAudioTrack(this, 'Spanish (Dolby Atmos)')">
+                    Spanish (Dolby Atmos) <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectAudioTrack(this, 'French (5.1)')">
+                    French (5.1) <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectAudioTrack(this, 'German (5.1)')">
+                    German (5.1) <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectAudioTrack(this, 'Japanese [Original]')">
+                    Japanese [Original] <span></span>
+                </div>
+            </div>
+            <div>
+                <div class="audio-subs-col-title">Subtitles</div>
+                <div class="audio-subs-option selected" onclick="selectSubtitleTrack(this, 'English [CC]')">
+                    English [CC] <span>✓</span>
+                </div>
+                <div class="audio-subs-option" onclick="selectSubtitleTrack(this, 'Off')">
+                    Off <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectSubtitleTrack(this, 'Spanish')">
+                    Spanish <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectSubtitleTrack(this, 'French')">
+                    French <span></span>
+                </div>
+                <div class="audio-subs-option" onclick="selectSubtitleTrack(this, 'German')">
+                    German <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="player-controls-bottom">
+            <div class="player-progress-bar-container" onclick="scrubPlayer(event)">
+                <div class="player-progress-fill" id="playerProgressFill">
+                    <div class="player-progress-handle"></div>
+                </div>
+            </div>
+
+            <div class="player-controls-row">
+                <div class="player-left-controls">
+                    <button class="player-btn" onclick="togglePlayPause()" id="playPauseBtn" title="Play/Pause (Space)">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" id="playPauseIcon"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="player-btn" onclick="skipTime(-10)" title="Rewind 10s (←)">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                    </button>
+                    <button class="player-btn" onclick="skipTime(10)" title="Fast Forward 10s (→)">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                    </button>
+                    <button class="player-btn" onclick="toggleSpeed()" id="speedBtn" title="Playback Speed" style="font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.4); padding: 2px 8px; border-radius: 4px;">
+                        1.0x
+                    </button>
+                    <div class="time-display" id="playerTimeDisplay">24:18 / 1:48:00</div>
+                </div>
+
+                <div class="player-right-controls">
+                    <button class="player-btn" onclick="toggleAudioSubsMenu()">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H5V6h14v12zM7 15h3c.55 0 1-.45 1-1v-1H9.5v.5h-2v-3h2v.5H11v-1c0-.55-.45-1-1-1H7c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1zm7 0h3c.55 0 1-.45 1-1v-1h-1.5v.5h-2v-3h2v.5H18v-1c0-.55-.45-1-1-1h-3c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1z"/></svg>
+                        Audio & Subtitles
+                    </button>
+                    <button class="player-btn" onclick="togglePlayerFullscreen()" title="Fullscreen (f)">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DETAILS POPUP MODAL (WITH EPISODES TAB) ==================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailsModal()">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            
+            <div class="modal-video-container">
+                <iframe width="100%" height="100%" id="modalVideoIframe" src="" title="Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
+                <div class="modal-video-overlay"></div>
+            </div>
+
+            <!-- Modal Nav Tabs -->
+            <div class="modal-tabs-bar">
+                <button class="modal-tab-btn active" onclick="switchModalTab('overview', this)">Overview</button>
+                <button class="modal-tab-btn" id="modalEpisodesTabBtn" onclick="switchModalTab('episodes', this)">Episodes</button>
+            </div>
+            
+            <!-- Tab 1: Overview -->
+            <div class="modal-body" id="modalOverviewTab">
+                <div>
+                    <h2 class="modal-title" id="modalTitle">Title</h2>
+                    <div class="modal-meta-row">
+                        <span class="match-score" id="modalMatch">98% Match</span>
+                        <span id="modalYear">2026</span>
+                        <span class="tag-pill">U/A 16+</span>
+                        <span id="modalDuration">2h 15m</span>
+                        <span class="tag-pill">Ultra HD 4K</span>
+                    </div>
+                    <div style="display: flex; gap: 14px; margin-bottom: 24px;">
+                        <button class="btn btn-play" id="modalPlayBtn">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            Play
+                        </button>
+                        <button class="btn btn-list" id="modalAddListBtn">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            <span>Add to My List</span>
+                        </button>
+                    </div>
+                    <p class="modal-desc" id="modalDesc">Detailed plot synopsis goes here...</p>
+                </div>
+                <div class="modal-sidebar">
+                    <p><strong>Cast:</strong> <span id="modalCast">Elena Rostova, David Kang, Sarah Thorne</span></p>
+                    <p><strong>Genres:</strong> <span id="modalGenre">Sci-Fi, Psychological Drama</span></p>
+                    <p><strong>Director:</strong> <span>Marcus Vance</span></p>
+                    <p><strong>Maturity Rating:</strong> <span>Recommended for ages 16 and above</span></p>
+                </div>
+            </div>
+
+            <!-- Tab 2: Episodes List -->
+            <div class="episodes-container" id="modalEpisodesTab">
+                <div class="episodes-header-row">
+                    <h3 style="font-size: 1.3rem;">Episodes</h3>
+                    <select class="season-select" onchange="renderEpisodesForSeason(this.value)">
+                        <option value="1">Season 1</option>
+                        <option value="2">Season 2</option>
+                    </select>
+                </div>
+                <div id="episodesListWrapper">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADD PROFILE MODAL ==================== -->
+    <div class="add-profile-modal-overlay" id="addProfileModal">
+        <div class="add-profile-box">
+            <h2 style="margin-bottom: 20px; font-size: 1.8rem;">Add Profile</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">Add a profile for another person watching Netflix.</p>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 24px;">
+                <div id="newProfileAvatarPreview" style="width: 70px; height: 70px; border-radius: 4px; background: #6c5ce7; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold;">N</div>
+                <input type="text" class="form-input" id="newProfileNameInput" placeholder="Name (e.g., Jordan)" style="flex: 1;" oninput="document.getElementById('newProfileAvatarPreview').innerText = (this.value || 'N').charAt(0).toUpperCase()">
+            </div>
+            <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="newProfileKidCheckbox">
+                <label for="newProfileKidCheckbox" style="font-size: 0.95rem; cursor: pointer;">Kid? (Only show titles rated 12 and under)</label>
+            </div>
+            <div style="display: flex; gap: 14px;">
+                <button class="btn btn-play" onclick="saveNewProfile()" style="padding: 10px 24px;">Continue</button>
+                <button class="manage-profiles-btn" onclick="closeAddProfileModal()" style="padding: 10px 24px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-container" id="toast">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#46d369"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        <span id="toastMsg">Action completed successfully</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p style="margin-bottom: 20px;">Questions? Call 1-800-040-1843</p>
+        <ul class="footer-links">
+            <li><a href="#home">FAQ</a></li>
+            <li><a href="#home">Help Center</a></li>
+            <li><a href="#signin">Account</a></li>
+            <li><a href="#home">Media Center</a></li>
+            <li><a href="#home">Investor Relations</a></li>
+            <li><a href="#home">Jobs</a></li>
+            <li><a href="#home">Ways to Watch</a></li>
+            <li><a href="#home">Terms of Use</a></li>
+            <li><a href="#home">Privacy</a></li>
+            <li><a href="#home">Cookie Preferences</a></li>
+            <li><a href="#home">Corporate Information</a></li>
+            <li><a href="#home">Contact Us</a></li>
+        </ul>
+        <button class="footer-service-code">Service Code: 894-391</button>
+        <p>&copy; 2026 Netflix Clone. Built with rich functionalities in a single file.</p>
+    </footer>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
     <script>
-        // Navbar Scroll Effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+        // Generated cinematic assets & fallbacks
+        const localHeroBg = 'file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/hero_bg_1788861856758.jpg';
+        const localThumb1 = 'file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/movie_thumbnail_1_1788861875168.jpg';
+        const localTvHero = 'file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/tv_hero_bg_1788862658317.jpg';
+        const localTop10 = 'file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/top10_poster_1788862673862.jpg';
+
+        const highResImages = [
+            localThumb1,
+            localTop10,
+            localTvHero,
+            localHeroBg,
+            'https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1533613220915-609f661a6fe1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1505699261379-3732049d5c4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+            'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
+        ];
+
+        // Central catalog of movies & series
+        const movieCatalog = [
+            { id: 'm1', title: 'Astro Odyssey', year: 2026, genre: 'Sci-Fi', match: 99, duration: '2 Seasons', badge: 'Original', image: localHeroBg, isSeries: true, desc: 'Stranded on a desolate red planet, an astronaut must confront temporal anomalies to save humanity.' },
+            { id: 'm2', title: 'The Ashen Path', year: 2026, genre: 'Fantasy', match: 98, duration: '1 Season', badge: 'Trending', image: localTvHero, isSeries: true, desc: 'A warrior guided by arcane embers journeys toward a forgotten sanctuary to prevent an apocalyptic collapse.' },
+            { id: 'm3', title: 'Cyber Chase: 2088', year: 2026, genre: 'Action', match: 97, duration: '2h 18m', badge: 'Top 10', image: localTop10, isSeries: false, desc: 'In Neo-Kyoto, a motorcycle operative uncovers a sinister syndicate threatening humanity.' },
+            { id: 'm4', title: 'The Red Citadel', year: 2025, genre: 'Drama', match: 96, duration: '2h 05m', badge: 'Award Winner', image: localThumb1, isSeries: false, desc: 'In an isolated mining colony, secrets ignite a high-stakes struggle for freedom and dominance.' },
+            { id: 'm5', title: 'Neon Nights', year: 2026, genre: 'Crime', match: 95, duration: '3 Seasons', badge: 'Original', image: highResImages[4], isSeries: true, desc: 'An enigmatic investigator descends into the cyber underground to solve a string of digital disappearances.' },
+            { id: 'm6', title: 'Quantum Horizon', year: 2025, genre: 'Sci-Fi', match: 94, duration: '1h 55m', badge: 'Popular', image: highResImages[5], isSeries: false, desc: 'Theoretical physicists open a rift in space-time that begins rewriting Earth\'s historical memories.' },
+            { id: 'm7', title: 'The Silent Forest', year: 2024, genre: 'Thriller', match: 93, duration: '1h 48m', badge: 'Hot', image: highResImages[6], isSeries: false, desc: 'A remote wilderness research team discovers that the trees communicate through acoustic seismic pulses.' },
+            { id: 'm8', title: 'Solar Flare', year: 2026, genre: 'Action', match: 92, duration: '2h 12m', badge: 'New', image: highResImages[7], isSeries: false, desc: 'When an unprecedented coronal mass ejection cripples world grids, pilots embark on a perilous orbital mission.' },
+            { id: 'm9', title: 'Echoes of Eternity', year: 2025, genre: 'Drama', match: 91, duration: '1 Season', badge: 'Critically Acclaimed', image: highResImages[8], isSeries: true, desc: 'A poignant drama recounting generations separated across relativistic space-flight journeys.' },
+            { id: 'm10', title: 'Midnight Velocity', year: 2026, genre: 'Action', match: 90, duration: '2h 02m', badge: 'Top 10', image: highResImages[9], isSeries: false, desc: 'Undercover racers navigate hyper-speed electric tournaments to expose corporate malfeasance.' }
+        ];
+
+        // Continue Watching items
+        let continueWatching = [
+            { id: 'm1', title: 'Astro Odyssey', progress: 72, remaining: '28m left', ep: 'S1:E3' },
+            { id: 'm3', title: 'Cyber Chase: 2088', progress: 45, remaining: '1h 12m left', ep: 'Feature Film' },
+            { id: 'm2', title: 'The Ashen Path', progress: 88, remaining: '8m left', ep: 'S1:E1' },
+            { id: 'm6', title: 'Quantum Horizon', progress: 20, remaining: '1h 32m left', ep: 'Feature Film' }
+        ];
+
+        // Notifications
+        let notifications = [
+            { id: 1, title: "The Ashen Path: Season 1 Available", time: "2 hours ago", img: localTvHero, unread: true },
+            { id: 2, title: "Cyber Chase: 2088 is #1 in Movies Today", time: "5 hours ago", img: localTop10, unread: true },
+            { id: 3, title: "Don't forget: 28m left in Astro Odyssey", time: "1 day ago", img: localHeroBg, unread: false }
+        ];
+
+        // Profiles data
+        let userProfiles = JSON.parse(localStorage.getItem('netflix_clone_profiles')) || [
+            { name: 'Alex', color: '#e50914', isKid: false },
+            { name: 'Kids', color: '#0984e3', isKid: true },
+            { name: 'Family', color: '#e17055', isKid: false },
+            { name: 'Guest', color: '#00b894', isKid: false }
+        ];
+
+        const trailers = ["b9EkMc79ZSU", "d9MyW72ELq0", "Yj0l7iGKh8g", "L61p2uyu3G0"];
+
+        // State variables
+        let myList = JSON.parse(localStorage.getItem('netflix_clone_my_list')) || ['m1', 'm3'];
+        let ratings = JSON.parse(localStorage.getItem('netflix_clone_ratings')) || {};
+        let currentProfile = 'Alex';
+        let isAudioFxEnabled = true;
+        let isHeroAudioMuted = true;
+        let playbackSpeed = 1.0;
+        let currentModalTitle = '';
+
+        // Web Audio Context for Netflix "Ta-Dum"
+        let audioCtx = null;
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            initRouter();
+            renderProfiles();
+            renderContinueWatchingRow();
+            populateAllRows();
+            updateMyListUI();
+            setupScrollListener();
+            setupSearchBox();
+            renderNotifications();
+            setupKeyboardShortcuts();
         });
 
-        // Dummy data for posters
-        // Using high quality unspash images to simulate movie posters, and the generated image
-        const generatedImage = 'file:///C:/Users/PCS/.gemini/antigravity-ide/brain/e95516bf-26b0-440c-b811-1d714fb57ecc/movie_thumbnail_1_1788861875168.jpg';
-        const fallbackImage1 = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'; // Fantasy
-        const fallbackImage2 = 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'; // Movie poster feel
-        const fallbackImage3 = 'https://images.unsplash.com/photo-1533613220915-609f661a6fe1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'; // Action
-        
-        const images = [generatedImage, fallbackImage1, fallbackImage2, fallbackImage3];
-        const titles = ["Astro Odyssey", "The Silent Woods", "Neon Nights", "Quantum Realm", "Echoes of Time", "Desert Storm", "Midnight Sun", "The Last Horizon"];
+        // ==================== NETFLIX "TA-DUM" SYNTHESIZER ====================
+        function playNetflixTadum() {
+            if (!isAudioFxEnabled) return;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        function populateRow(rowId, isLarge = false) {
-            const row = document.getElementById(rowId);
-            // Add 10 items per row
-            for (let i = 0; i < 10; i++) {
-                const poster = document.createElement('div');
-                poster.className = 'poster' + (isLarge ? ' poster-large' : '');
-                
-                // Assign a random image from our array
-                const img = images[Math.floor(Math.random() * images.length)];
-                poster.style.backgroundImage = `url('${img}')`;
-                
-                const title = titles[Math.floor(Math.random() * titles.length)];
+                const now = audioCtx.currentTime;
 
-                poster.innerHTML = `
-                    <div class="poster-info">
-                        <div class="poster-title">${title}</div>
-                        <div class="poster-tags">98% Match &bull; 2026 &bull; HD</div>
-                    </div>
-                `;
-                
-                row.appendChild(poster);
+                // 1. Deep sub-bass boom (55Hz down to 35Hz)
+                const bassOsc = audioCtx.createOscillator();
+                const bassGain = audioCtx.createGain();
+                bassOsc.type = 'triangle';
+                bassOsc.frequency.setValueAtTime(58, now);
+                bassOsc.frequency.exponentialRampToValueAtTime(32, now + 1.6);
+                bassGain.gain.setValueAtTime(0.7, now);
+                bassGain.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+                bassOsc.connect(bassGain);
+                bassGain.connect(audioCtx.destination);
+                bassOsc.start(now);
+                bassOsc.stop(now + 1.6);
+
+                // 2. Second percussive hit ("Dum") at +0.12s
+                const hitOsc = audioCtx.createOscillator();
+                const hitGain = audioCtx.createGain();
+                hitOsc.type = 'sawtooth';
+                hitOsc.frequency.setValueAtTime(110, now + 0.12);
+                hitOsc.frequency.exponentialRampToValueAtTime(45, now + 1.4);
+                hitGain.gain.setValueAtTime(0.001, now);
+                hitGain.gain.setValueAtTime(0.6, now + 0.12);
+                hitGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+                hitOsc.connect(hitGain);
+                hitGain.connect(audioCtx.destination);
+                hitOsc.start(now + 0.12);
+                hitOsc.stop(now + 1.5);
+
+                // 3. Metallic resonant shimmer (harmonics)
+                const chimeOsc = audioCtx.createOscillator();
+                const chimeGain = audioCtx.createGain();
+                chimeOsc.type = 'sine';
+                chimeOsc.frequency.setValueAtTime(220, now + 0.12);
+                chimeOsc.frequency.exponentialRampToValueAtTime(180, now + 1.8);
+                chimeGain.gain.setValueAtTime(0.001, now);
+                chimeGain.gain.setValueAtTime(0.3, now + 0.12);
+                chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+                chimeOsc.connect(chimeGain);
+                chimeGain.connect(audioCtx.destination);
+                chimeOsc.start(now + 0.12);
+                chimeOsc.stop(now + 2.0);
+
+            } catch (err) {
+                console.log("Web Audio not supported or gesture blocked", err);
+            }
+        }
+
+        function toggleAudioFx() {
+            isAudioFxEnabled = !isAudioFxEnabled;
+            document.getElementById('audioFxIcon').innerText = isAudioFxEnabled ? '🔊' : '🔇';
+            document.getElementById('audioFxText').innerText = isAudioFxEnabled ? 'Sound ON' : 'Sound OFF';
+            showToast(`Sound FX ${isAudioFxEnabled ? 'Enabled (Ta-Dum active)' : 'Muted'}`);
+            if (isAudioFxEnabled) playNetflixTadum();
+        }
+
+        // ==================== HERO VIDEO AUDIO TOGGLE ====================
+        function toggleHeroAudio() {
+            isHeroAudioMuted = !isHeroAudioMuted;
+            const iframe = document.getElementById('heroVideoIframe');
+            const icon = document.getElementById('heroAudioIcon');
+            
+            if (isHeroAudioMuted) {
+                iframe.src = "https://www.youtube.com/embed/b9EkMc79ZSU?autoplay=1&mute=1&controls=0&loop=1&playlist=b9EkMc79ZSU&modestbranding=1";
+                icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+                showToast("Hero Preview Audio: Muted");
+            } else {
+                iframe.src = "https://www.youtube.com/embed/b9EkMc79ZSU?autoplay=1&mute=0&controls=0&loop=1&playlist=b9EkMc79ZSU&modestbranding=1";
+                icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+                showToast("Hero Preview Audio: Playing");
+            }
+        }
+
+        // ==================== HASH ROUTER / PAGE SWITCHER ====================
+        function initRouter() {
+            window.addEventListener('hashchange', handleRoute);
+            handleRoute();
+        }
+
+        function handleRoute() {
+            let hash = window.location.hash.replace('#', '') || 'home';
+            
+            // Fullscreen Watch View
+            if (hash.startsWith('watch')) {
+                showWatchView(hash);
+                return;
+            } else {
+                document.getElementById('watch-view').classList.remove('active');
             }
 
-            // Simple wheel scroll for horizontal scrolling
-            row.addEventListener("wheel", (evt) => {
-                evt.preventDefault();
-                row.scrollLeft += evt.deltaY;
+            const validPages = ['home', 'tv-shows', 'movies', 'new', 'my-list', 'search', 'signin', 'profiles'];
+            const targetPage = validPages.includes(hash.split('?')[0]) ? hash.split('?')[0] : 'home';
+
+            // Switch active page container
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            const activeElem = document.getElementById(`page-${targetPage}`);
+            if (activeElem) activeElem.classList.add('active');
+
+            // Toggle navbar active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('data-page') === targetPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (targetPage === 'my-list') renderMyListPage();
+            if (targetPage === 'search') runSearch(document.getElementById('searchInput').value);
+        }
+
+        // ==================== CONTINUE WATCHING ROW ====================
+        function renderContinueWatchingRow() {
+            const container = document.getElementById('continueWatchingRow');
+            const section = document.getElementById('continueWatchingSection');
+            if (!container) return;
+
+            container.innerHTML = '';
+            if (continueWatching.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            section.style.display = 'block';
+
+            continueWatching.forEach(item => {
+                const catalogItem = movieCatalog.find(m => m.id === item.id) || movieCatalog[0];
+                const card = document.createElement('div');
+                card.className = 'continue-card';
+                card.style.backgroundImage = `url('${catalogItem.image}')`;
+
+                card.innerHTML = `
+                    <div class="continue-play-overlay">▶</div>
+                    <div class="continue-info">
+                        <div class="continue-title">${item.title}</div>
+                        <div class="continue-progress-bg">
+                            <div class="continue-progress-fill" style="width: ${item.progress}%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="continue-time-text">${item.ep} &bull; ${item.remaining}</span>
+                            <span onclick="event.stopPropagation(); removeFromContinueWatching('${item.id}')" style="color: #aaa; font-size: 0.75rem; cursor: pointer;" title="Remove from row">✕</span>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    startStreaming(item.title, `Resume ${item.ep}`);
+                });
+
+                container.appendChild(card);
             });
         }
 
-        // Initialize rows
-        populateRow('originals', true);
-        populateRow('trending');
-        populateRow('scifi');
+        function removeFromContinueWatching(id) {
+            continueWatching = continueWatching.filter(c => c.id !== id);
+            renderContinueWatchingRow();
+            showToast("Removed from Continue Watching row");
+        }
+
+        // ==================== POPULATING ROWS ====================
+        function populateAllRows() {
+            populateStandardRow('homeTrendingRow', movieCatalog.slice(0, 8));
+            populateStandardRow('homeOriginalsRow', movieCatalog.slice(2, 10), true);
+            populateTop10Row('homeTop10Row', movieCatalog);
+            populateStandardRow('homeScifiRow', movieCatalog.filter(m => m.genre === 'Sci-Fi' || m.genre === 'Action'));
+
+            populateStandardRow('tvDramasRow', movieCatalog.filter(m => m.genre === 'Drama' || m.genre === 'Fantasy'), true);
+            populateStandardRow('tvFantasyRow', movieCatalog.slice(1, 9));
+            populateStandardRow('tvCrimeRow', movieCatalog.slice(3, 10));
+
+            populateStandardRow('movieActionRow', movieCatalog.filter(m => m.genre === 'Action' || m.genre === 'Sci-Fi'));
+            populateStandardRow('movieAcclaimedRow', movieCatalog.slice(0, 7), true);
+            populateStandardRow('movieThrillersRow', movieCatalog.slice(2, 9));
+
+            populateTop10Row('newTop10Row', movieCatalog);
+            populateStandardRow('newComingSoonRow', movieCatalog.slice(4, 10));
+            populateStandardRow('newFreshRow', movieCatalog.slice(0, 6));
+        }
+
+        function createPosterCard(item, isLarge = false) {
+            const card = document.createElement('div');
+            card.className = `poster ${isLarge ? 'poster-large' : ''}`;
+            card.style.backgroundImage = `url('${item.image}')`;
+
+            const inList = myList.includes(item.id);
+            const userRating = ratings[item.id] || null;
+
+            card.innerHTML = `
+                ${item.badge ? `<div class="poster-badge">${item.badge}</div>` : ''}
+                <div class="poster-info">
+                    <div class="poster-title">${item.title}</div>
+                    <div class="poster-meta">
+                        <span class="match-score">${item.match}% Match</span>
+                        <span>${item.year}</span>
+                        <span class="tag-pill">${item.genre}</span>
+                        <span>${item.duration}</span>
+                    </div>
+                    <div class="poster-actions">
+                        <button class="card-btn" title="Play" onclick="event.stopPropagation(); startStreaming('${item.title}', '${item.duration}')">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button class="card-btn ${inList ? 'active' : ''}" title="${inList ? 'Remove from My List' : 'Add to My List'}" onclick="event.stopPropagation(); toggleMyListItem('${item.id}', this)">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="${inList ? 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' : 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'}"/></svg>
+                        </button>
+                        
+                        <!-- 3-Way Reaction Button Wrapper -->
+                        <div class="reaction-btn-wrapper" style="position: relative;">
+                            <button class="card-btn ${userRating ? 'active' : ''}" title="Rate this title" onclick="event.stopPropagation();">
+                                ${userRating === 'love' ? '❤️' : (userRating === 'down' ? '👎' : '👍')}
+                            </button>
+                            <div class="reaction-menu">
+                                <button class="reaction-choice" title="Not for me" onclick="event.stopPropagation(); setRating('${item.id}', 'down')">👎</button>
+                                <button class="reaction-choice" title="I like this" onclick="event.stopPropagation(); setRating('${item.id}', 'up')">👍</button>
+                                <button class="reaction-choice" title="Love this!" onclick="event.stopPropagation(); setRating('${item.id}', 'love')">❤️</button>
+                            </div>
+                        </div>
+
+                        <button class="card-btn" title="More Info" onclick="event.stopPropagation(); openDetailsModal('${item.title}')">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => openDetailsModal(item.title));
+            return card;
+        }
+
+        function populateStandardRow(elementId, items, isLarge = false) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            container.innerHTML = '';
+            items.forEach(item => {
+                container.appendChild(createPosterCard(item, isLarge));
+            });
+        }
+
+        function populateTop10Row(elementId, items) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            container.innerHTML = '';
+            items.slice(0, 10).forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'top10-poster-container';
+                wrapper.innerHTML = `
+                    <div class="top10-rank">${index + 1}</div>
+                    <div class="top10-poster" style="background-image: url('${item.image}')">
+                        <div class="poster-badge">TOP 10</div>
+                        <div class="poster-info">
+                            <div class="poster-title">${item.title}</div>
+                            <div class="poster-meta">
+                                <span class="match-score">${item.match}% Match</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                wrapper.addEventListener('click', () => openDetailsModal(item.title));
+                container.appendChild(wrapper);
+            });
+        }
+
+        // ==================== 3-WAY RATING SYSTEM ====================
+        function setRating(id, ratingType) {
+            ratings[id] = ratingType;
+            localStorage.setItem('netflix_clone_ratings', JSON.stringify(ratings));
+            const item = movieCatalog.find(m => m.id === id);
+            const msg = ratingType === 'love' ? 'Rated "Love this!" ❤️' : (ratingType === 'down' ? 'Rated "Not for me" 👎' : 'Rated "I like this" 👍');
+            showToast(`${msg} for ${item ? item.title : 'title'}`);
+            populateAllRows();
+        }
+
+        // ==================== MY LIST MANAGEMENT ====================
+        function updateMyListUI() {
+            const badge = document.getElementById('myListBadge');
+            if (badge) badge.innerText = myList.length;
+            localStorage.setItem('netflix_clone_my_list', JSON.stringify(myList));
+        }
+
+        function toggleMyListItem(id, btnElement) {
+            const item = movieCatalog.find(m => m.id === id);
+            const index = myList.indexOf(id);
+
+            if (index > -1) {
+                myList.splice(index, 1);
+                showToast(`Removed "${item ? item.title : 'Item'}" from My List`);
+                if (btnElement) {
+                    btnElement.classList.remove('active');
+                    btnElement.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>`;
+                }
+            } else {
+                myList.push(id);
+                showToast(`Added "${item ? item.title : 'Item'}" to My List`);
+                if (btnElement) {
+                    btnElement.classList.add('active');
+                    btnElement.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+                }
+            }
+
+            updateMyListUI();
+            if (window.location.hash === '#my-list') renderMyListPage();
+        }
+
+        function toggleMyListHero(title) {
+            const item = movieCatalog.find(m => m.title === title) || movieCatalog[0];
+            const btn = document.getElementById('homeListBtn');
+            const inList = myList.includes(item.id);
+
+            if (inList) {
+                myList = myList.filter(id => id !== item.id);
+                btn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Add to My List</span>`;
+                showToast(`Removed "${title}" from My List`);
+            } else {
+                myList.push(item.id);
+                btn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>Added to My List</span>`;
+                showToast(`Added "${title}" to My List`);
+            }
+            updateMyListUI();
+        }
+
+        function renderMyListPage() {
+            const grid = document.getElementById('myListGrid');
+            const empty = document.getElementById('myListEmpty');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            const savedItems = movieCatalog.filter(m => myList.includes(m.id));
+
+            if (savedItems.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                empty.style.display = 'none';
+                savedItems.forEach(item => {
+                    grid.appendChild(createPosterCard(item, false));
+                });
+            }
+        }
+
+        function clearMyList() {
+            if (confirm("Are you sure you want to clear your entire watchlist?")) {
+                myList = [];
+                updateMyListUI();
+                renderMyListPage();
+                showToast("Your watchlist has been cleared");
+            }
+        }
+
+        // ==================== STREAMING WATCH PLAYER ====================
+        function startStreaming(title, subtitle) {
+            playNetflixTadum();
+            window.location.hash = `#watch?title=${encodeURIComponent(title)}&sub=${encodeURIComponent(subtitle)}`;
+        }
+
+        function showWatchView(hash) {
+            const watchView = document.getElementById('watch-view');
+            const params = new URLSearchParams(hash.split('?')[1] || '');
+            const title = params.get('title') || 'Astro Odyssey';
+            const subtitle = params.get('sub') || 'Ultra HD 4K Streaming';
+
+            document.getElementById('playerMediaTitle').innerText = title;
+            document.getElementById('playerMediaSubtitle').innerText = subtitle;
+
+            const randomTrailer = trailers[Math.floor(Math.random() * trailers.length)];
+            const iframe = document.getElementById('playerIframe');
+            iframe.src = `https://www.youtube.com/embed/${randomTrailer}?autoplay=1&controls=0&modestbranding=1&rel=0&loop=1`;
+
+            watchView.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Show skip intro button for first 15 seconds
+            const skipBtn = document.getElementById('skipIntroBtn');
+            skipBtn.style.display = 'flex';
+            setTimeout(() => {
+                skipBtn.style.display = 'none';
+            }, 12000);
+        }
+
+        function exitStreaming() {
+            const watchView = document.getElementById('watch-view');
+            const iframe = document.getElementById('playerIframe');
+            iframe.src = '';
+            watchView.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            window.location.hash = '#home';
+        }
+
+        function skipIntroAction() {
+            document.getElementById('skipIntroBtn').style.display = 'none';
+            showToast("Skipped Opening Recaps & Intro");
+            document.getElementById('playerProgressFill').style.width = '24%';
+        }
+
+        function togglePlayPause() {
+            const icon = document.getElementById('playPauseIcon');
+            if (icon.innerHTML.includes('M6 19h4V5H6v14')) {
+                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                showToast("Playback Paused");
+            } else {
+                icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                showToast("Playback Resumed");
+            }
+        }
+
+        function skipTime(seconds) {
+            showToast(`${seconds > 0 ? 'Fast forwarded' : 'Rewound'} ${Math.abs(seconds)} seconds`);
+        }
+
+        function toggleSpeed() {
+            const speeds = [0.75, 1.0, 1.25, 1.5];
+            const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length;
+            playbackSpeed = speeds[nextIdx];
+            document.getElementById('speedBtn').innerText = `${playbackSpeed}x`;
+            showToast(`Playback speed set to ${playbackSpeed}x`);
+        }
+
+        function scrubPlayer(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const clickPos = (event.clientX - rect.left) / rect.width;
+            const pct = Math.max(0, Math.min(100, clickPos * 100));
+            document.getElementById('playerProgressFill').style.width = pct + '%';
+        }
+
+        function togglePlayerFullscreen() {
+            const watchView = document.getElementById('watch-view');
+            if (!document.fullscreenElement) {
+                watchView.requestFullscreen().catch(err => alert(err.message));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function toggleAudioSubsMenu() {
+            const menu = document.getElementById('audioSubsModal');
+            menu.classList.toggle('active');
+        }
+
+        function selectAudioTrack(elem, trackName) {
+            elem.parentElement.querySelectorAll('.audio-subs-option').forEach(o => {
+                o.classList.remove('selected');
+                o.querySelector('span').innerText = '';
+            });
+            elem.classList.add('selected');
+            elem.querySelector('span').innerText = '✓';
+            showToast(`Audio Track: ${trackName}`);
+        }
+
+        function selectSubtitleTrack(elem, subName) {
+            elem.parentElement.querySelectorAll('.audio-subs-option').forEach(o => {
+                o.classList.remove('selected');
+                o.querySelector('span').innerText = '';
+            });
+            elem.classList.add('selected');
+            elem.querySelector('span').innerText = '✓';
+            showToast(`Subtitles: ${subName}`);
+        }
+
+        // ==================== DETAILS MODAL & EPISODES ====================
+        function openDetailsModal(title) {
+            currentModalTitle = title;
+            const modal = document.getElementById('modalOverlay');
+            const item = movieCatalog.find(m => m.title === title) || {
+                title: title,
+                year: 2026,
+                match: 98,
+                duration: '2h 15m',
+                genre: 'Sci-Fi, Adventure',
+                isSeries: true,
+                desc: 'An unforgettable cinematic masterpiece filled with cutting-edge visual effects, compelling characters, and pulse-pounding tension.'
+            };
+
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalMatch').innerText = `${item.match || 98}% Match`;
+            document.getElementById('modalYear').innerText = item.year || '2026';
+            document.getElementById('modalDuration').innerText = item.duration || '2h 15m';
+            document.getElementById('modalDesc').innerText = item.desc;
+            document.getElementById('modalGenre').innerText = item.genre || 'Action, Sci-Fi';
+
+            // Show / Hide Episodes tab based on whether title is a series
+            const episodesTabBtn = document.getElementById('modalEpisodesTabBtn');
+            episodesTabBtn.style.display = item.isSeries ? 'block' : 'none';
+            switchModalTab('overview', document.querySelector('.modal-tab-btn'));
+
+            const trailerId = trailers[Math.floor(Math.random() * trailers.length)];
+            document.getElementById('modalVideoIframe').src = `https://www.youtube.com/embed/${trailerId}?autoplay=1&mute=1&controls=0&modestbranding=1&loop=1`;
+
+            const playBtn = document.getElementById('modalPlayBtn');
+            playBtn.onclick = () => {
+                closeDetailsModal();
+                startStreaming(item.title, item.duration);
+            };
+
+            const addBtn = document.getElementById('modalAddListBtn');
+            const inList = myList.includes(item.id);
+            addBtn.innerHTML = inList ? 
+                `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>In My List</span>` :
+                `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Add to My List</span>`;
+            
+            addBtn.onclick = () => {
+                toggleMyListItem(item.id || 'm1', null);
+                closeDetailsModal();
+            };
+
+            renderEpisodesForSeason(1);
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchModalTab(tab, btn) {
+            document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (tab === 'overview') {
+                document.getElementById('modalOverviewTab').style.display = 'grid';
+                document.getElementById('modalEpisodesTab').classList.remove('active');
+            } else {
+                document.getElementById('modalOverviewTab').style.display = 'none';
+                document.getElementById('modalEpisodesTab').classList.add('active');
+            }
+        }
+
+        function renderEpisodesForSeason(seasonNum) {
+            const wrapper = document.getElementById('episodesListWrapper');
+            if (!wrapper) return;
+
+            wrapper.innerHTML = '';
+            const epTitles = [
+                ["Red Horizon", "Echoes from the Deep", "The Singularity Rift", "Temporal Paradox", "The Beacon Reborn"],
+                ["New Horizons", "Dark Embers", "The Citadel Falls", "Ascension Protocol", "Final Threshold"]
+            ];
+            const titlesList = epTitles[seasonNum - 1] || epTitles[0];
+
+            titlesList.forEach((t, i) => {
+                const epCard = document.createElement('div');
+                epCard.className = 'episode-card';
+                epCard.innerHTML = `
+                    <div class="episode-num">${i + 1}</div>
+                    <div class="episode-thumb" style="background-image: url('${highResImages[(i + 2) % highResImages.length]}')"></div>
+                    <div class="episode-details">
+                        <div class="episode-title-row">
+                            <span>${t}</span>
+                            <span style="color: #aaa; font-weight: 500;">5${2 - i}m</span>
+                        </div>
+                        <p class="episode-desc">An unexpected challenge arises, forcing the crew to rethink their strategy as critical systems threaten to overload.</p>
+                    </div>
+                `;
+
+                epCard.addEventListener('click', () => {
+                    closeDetailsModal();
+                    startStreaming(currentModalTitle, `Season ${seasonNum}: Episode ${i + 1} - ${t}`);
+                });
+
+                wrapper.appendChild(epCard);
+            });
+        }
+
+        function closeDetailsModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.remove('active');
+            document.getElementById('modalVideoIframe').src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) closeDetailsModal();
+        });
+
+        // ==================== LIVE SEARCH SYSTEM ====================
+        function setupSearchBox() {
+            const box = document.getElementById('searchBox');
+            const input = document.getElementById('searchInput');
+            const btn = document.getElementById('searchIconBtn');
+            const clearBtn = document.getElementById('searchClearBtn');
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                box.classList.toggle('active');
+                if (box.classList.contains('active')) input.focus();
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!box.contains(e.target) && input.value.trim() === '') {
+                    box.classList.remove('active');
+                }
+            });
+
+            input.addEventListener('input', () => {
+                const query = input.value.trim();
+                clearBtn.style.display = query ? 'flex' : 'none';
+                if (query.length > 0) {
+                    if (window.location.hash !== '#search') window.location.hash = '#search';
+                    runSearch(query);
+                }
+            });
+        }
+
+        function clearLiveSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            document.getElementById('searchClearBtn').style.display = 'none';
+            window.location.hash = '#home';
+        }
+
+        function runSearch(query) {
+            const grid = document.getElementById('searchResultsGrid');
+            const empty = document.getElementById('searchEmpty');
+            const titleElem = document.getElementById('searchHeaderTitle');
+            const subElem = document.getElementById('searchHeaderSub');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            const q = (query || '').toLowerCase().trim();
+            titleElem.innerText = q ? `Results for "${query}"` : "Explore All Titles";
+
+            const matches = movieCatalog.filter(m => 
+                !q || 
+                m.title.toLowerCase().includes(q) || 
+                m.genre.toLowerCase().includes(q) || 
+                m.desc.toLowerCase().includes(q)
+            );
+
+            subElem.innerText = `Found ${matches.length} matching titles`;
+
+            if (matches.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                empty.style.display = 'none';
+                matches.forEach(item => {
+                    grid.appendChild(createPosterCard(item, false));
+                });
+            }
+        }
+
+        function filterSearchCategory(btn, cat) {
+            btn.parentElement.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const input = document.getElementById('searchInput');
+            input.value = cat === 'all' ? '' : cat;
+            runSearch(input.value);
+        }
+
+        function filterGenre(btn, genre) {
+            btn.parentElement.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            showToast(`Filtered by genre: ${genre}`);
+        }
+
+        // ==================== NOTIFICATIONS TRAY ====================
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            const badge = document.getElementById('notifBadge');
+            if (!list) return;
+
+            list.innerHTML = '';
+            const unreadCount = notifications.filter(n => n.unread).length;
+            badge.style.display = unreadCount > 0 ? 'block' : 'none';
+
+            notifications.forEach(n => {
+                const item = document.createElement('div');
+                item.className = 'notification-item';
+                item.innerHTML = `
+                    <div class="notification-thumb" style="background-image: url('${n.img}')"></div>
+                    <div class="notification-content">
+                        <div class="notification-title">${n.title}</div>
+                        <div>Click to view preview</div>
+                        <div class="notification-time">${n.time}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => {
+                    n.unread = false;
+                    renderNotifications();
+                    toggleNotificationsTray();
+                    openDetailsModal(movieCatalog[0].title);
+                });
+                list.appendChild(item);
+            });
+        }
+
+        function toggleNotificationsTray() {
+            const container = document.getElementById('notificationsContainer');
+            container.classList.toggle('open');
+        }
+
+        function markAllNotificationsRead() {
+            notifications.forEach(n => n.unread = false);
+            renderNotifications();
+            showToast("All notifications marked as read");
+        }
+
+        document.addEventListener('click', (e) => {
+            const container = document.getElementById('notificationsContainer');
+            if (container && !container.contains(e.target)) {
+                container.classList.remove('open');
+            }
+        });
+
+        // ==================== PROFILES & USER SWITCHING ====================
+        function renderProfiles() {
+            // Render in Profiles View
+            const grid = document.getElementById('profilesGrid');
+            if (grid) {
+                grid.innerHTML = '';
+                userProfiles.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'profile-card';
+                    card.innerHTML = `
+                        <div class="profile-card-avatar" style="background: ${p.color};">${p.name.charAt(0).toUpperCase()}</div>
+                        <span class="profile-card-name">${p.name}</span>
+                    `;
+                    card.onclick = () => switchProfile(p.name, p.color);
+                    grid.appendChild(card);
+                });
+
+                // Add Profile Card
+                const addCard = document.createElement('div');
+                addCard.className = 'profile-card add-profile-card';
+                addCard.innerHTML = `
+                    <div class="profile-card-avatar">+</div>
+                    <span class="profile-card-name">Add Profile</span>
+                `;
+                addCard.onclick = openAddProfileModal;
+                grid.appendChild(addCard);
+            }
+
+            // Render in Navbar Dropdown
+            const dropList = document.getElementById('profileDropdownList');
+            if (dropList) {
+                dropList.innerHTML = '';
+                userProfiles.forEach(p => {
+                    const a = document.createElement('a');
+                    a.className = 'profile-item';
+                    a.innerHTML = `
+                        <div class="profile-avatar" style="width: 26px; height: 26px; font-size: 0.8rem; background: ${p.color};">${p.name.charAt(0).toUpperCase()}</div>
+                        ${p.name} ${p.name === currentProfile ? '(Current)' : ''}
+                    `;
+                    a.onclick = () => switchProfile(p.name, p.color);
+                    dropList.appendChild(a);
+                });
+            }
+        }
+
+        function switchProfile(name, color) {
+            currentProfile = name;
+            const navAvatar = document.getElementById('navAvatar');
+            navAvatar.innerText = name.charAt(0).toUpperCase();
+            navAvatar.style.background = color;
+            document.getElementById('continueUserLabel').innerText = name;
+            showToast(`Switched active profile to: ${name}`);
+            renderProfiles();
+            window.location.hash = '#home';
+        }
+
+        function openAddProfileModal() {
+            document.getElementById('addProfileModal').classList.add('active');
+            document.getElementById('newProfileNameInput').focus();
+        }
+
+        function closeAddProfileModal() {
+            document.getElementById('addProfileModal').classList.remove('active');
+        }
+
+        function saveNewProfile() {
+            const name = document.getElementById('newProfileNameInput').value.trim();
+            if (!name) {
+                alert("Please enter a profile name");
+                return;
+            }
+            const isKid = document.getElementById('newProfileKidCheckbox').checked;
+            const colors = ['#6c5ce7', '#e84393', '#00cec9', '#f39c12', '#2ecc71'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            userProfiles.push({ name: name, color: randomColor, isKid: isKid });
+            localStorage.setItem('netflix_clone_profiles', JSON.stringify(userProfiles));
+            renderProfiles();
+            closeAddProfileModal();
+            showToast(`Profile "${name}" added successfully!`);
+            document.getElementById('newProfileNameInput').value = '';
+        }
+
+        function handleSignInSubmit(e) {
+            e.preventDefault();
+            playNetflixTadum();
+            showToast("Signed in successfully! Welcome back, Alex.");
+            setTimeout(() => {
+                window.location.hash = '#home';
+            }, 700);
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // If in watch view
+                if (document.getElementById('watch-view').classList.contains('active')) {
+                    if (e.key === ' ' || e.key === 'k') {
+                        e.preventDefault();
+                        togglePlayPause();
+                    } else if (e.key === 'ArrowRight') {
+                        skipTime(10);
+                    } else if (e.key === 'ArrowLeft') {
+                        skipTime(-10);
+                    } else if (e.key === 'f') {
+                        togglePlayerFullscreen();
+                    } else if (e.key === 'Escape') {
+                        exitStreaming();
+                    }
+                } else {
+                    if (e.key === 'Escape') {
+                        closeDetailsModal();
+                        closeAddProfileModal();
+                    }
+                }
+            });
+        }
+
+        // ==================== TOAST NOTIFICATIONS ====================
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3200);
+        }
+
+        // ==================== NAVBAR SCROLL ADAPTATION ====================
+        function setupScrollListener() {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 40) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
     </script>
 </body>
 </html>
